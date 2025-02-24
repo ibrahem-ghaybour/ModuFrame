@@ -5,3 +5,9 @@
     <NuxtWelcome />
   </div>
 </template>
+<script setup>
+// const { $firebase } = useNuxtApp();
+// onMounted(()=>{
+//   console.log($firebase)
+// })
+</script>
