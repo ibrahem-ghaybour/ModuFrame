@@ -13,6 +13,7 @@ onMounted(() => {
     const hash = window.location.hash;
     const tokenMatch = hash.match(/access_token=([^&]*)/);
     const token = tokenMatch ? tokenMatch[1] : null;
+    if (!token) return;
     localStorage.setItem("token", token);
   }
 });
