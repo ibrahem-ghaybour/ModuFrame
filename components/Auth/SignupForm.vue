@@ -193,4 +193,9 @@ watch(errorMessages, (newVal) => {
     showPopup.value = true;
   }
 });
+watch(showPopup, (newVal) => {
+  if (!newVal) {
+    errorMessages.value = null;
+  }
+});
 </script>
