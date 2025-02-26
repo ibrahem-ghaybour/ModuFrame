@@ -27,9 +27,10 @@ export const useAuthorization = () => {
         body: JSON.stringify(obj),
       });
       if (error.value) {
-        return error.value;
+        console.log(error.value);
+        callback(error);
+        return;
       }
-      console.log(data.value);
       callback(data.value);
     } catch (error) {
       console.log(error);

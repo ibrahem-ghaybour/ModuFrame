@@ -1,19 +1,17 @@
 <template>
-  <div
-    class="min-h-screen w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between bg-black p-12"
-  >
+  <div class="min-h-screen w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between bg-black p-12">
     <!-- Left side with Welcome message -->
     <div class="lg:flex-1">
       <h1 class="text-6xl font-bold text-white mb-4">
-        Welcome Back <span class="text-blue-500">!</span>
+        Join Us <span class="text-blue-500">!</span>
       </h1>
       <div class="inline-block border border-white/20 px-6 py-2 rounded-lg">
-        <span class="text-white/80">Skip the lag ?</span>
+        <span class="text-white/80">Start your journey</span>
       </div>
     </div>
 
-    <!-- Right side with login form -->
-    <div class="lg:w-[450px] w-full">
+    <!-- Right side with signup form -->
+    <div class="w-[450px]">
       <div class="bg-[#1a1a1a] rounded-3xl p-8 relative overflow-hidden">
         <!-- Purple gradient circles -->
         <div
@@ -23,22 +21,20 @@
           class="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-700/30 rounded-full blur-3xl"
         ></div>
 
-        <!-- Login Form -->
+        <!-- Signup Form -->
         <div class="relative z-10">
-          <h2 class="text-2xl font-semibold text-white mb-2">
-            Login / <span class="text-[#575ebd76]">Signup</span>
-          </h2>
-          <p class="text-gray-400 mb-8">Glad you're back!</p>
+          <h2 class="text-2xl font-semibold text-white mb-2">Sign Up</h2>
+          <p class="text-gray-400 mb-8">Create your account</p>
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
-            <!-- Username Input -->
+            <!-- Email Input -->
             <div>
               <input
                 v-model="email"
                 type="email"
                 required
                 class="w-full bg-black/40 text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-purple-500"
-                placeholder="Username"
+                placeholder="Email address"
               />
             </div>
 
@@ -53,37 +49,37 @@
               />
             </div>
 
-            <!-- Remember me -->
+            <!-- Confirm Password Input -->
+            <div>
+              <input
+                v-model="confirmPassword"
+                type="password"
+                required
+                class="w-full bg-black/40 text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-purple-500"
+                placeholder="Confirm Password"
+              />
+            </div>
+
+            <!-- Terms and Conditions -->
             <div class="flex items-center">
               <input
                 type="checkbox"
-                id="remember"
+                id="terms"
+                required
                 class="rounded bg-black/40 border-gray-700 text-purple-500 focus:ring-purple-500"
               />
-              <label for="remember" class="ml-2 text-sm text-gray-400"
-                >Remember me</label
-              >
+              <label for="terms" class="ml-2 text-sm text-gray-400">
+                I agree to the <a href="#" class="text-purple-500 hover:text-purple-400">Terms & Conditions</a>
+              </label>
             </div>
 
-            <!-- Login Button -->
+            <!-- Signup Button -->
             <button
               type="submit"
               class="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity"
-            >0{{ loading }}0{{ dataUser }}4
-              <span v-if="loading">
-                <FontAwesomeIcon :icon="faSpinner" class="animate-spin" />
-              </span>
-              <span v-else>
-                - Login / <span class="text-[#222773]">Signup</span>
-              </span>
+            >
+              Create Account
             </button>
-
-            <!-- Forgot password -->
-            <div class="text-center">
-              <a href="#" class="text-sm text-gray-400 hover:text-white">
-                Forgot password?
-              </a>
-            </div>
 
             <!-- Social Login Divider -->
             <div class="flex items-center justify-center space-x-4 my-6">
@@ -97,8 +93,6 @@
               <button
                 class="p-2 flex items-center justify-center bg-black/40 rounded-full border border-gray-700 hover:border-gray-500 w-8 h-8"
               >
-                <!-- <img src="/google-icon.svg" alt="Google" class="w-6 h-6" /> -->
-                <!-- <GoogleIcon class="!text-[#297322]" /> -->
                 <span>
                   <FontAwesomeIcon :icon="faGoogle" class="text-[#297322]" />
                 </span>
@@ -106,22 +100,23 @@
               <button
                 class="p-2 flex items-center justify-center bg-black/40 rounded-full border border-gray-700 hover:border-gray-500 w-8 h-8"
               >
-                <!-- <img src="/facebook-icon.svg" alt="Facebook" class="w-6 h-6" /> -->
                 <FontAwesomeIcon :icon="faFacebook" class="text-blue-500" />
               </button>
               <button
                 class="p-2 flex items-center justify-center bg-black/40 rounded-full border border-gray-700 hover:border-gray-500 w-8 h-8"
               >
-                <!-- <img src="/github-icon.svg" alt="GitHub" class="w-6 h-6" /> -->
                 <span>
                   <FontAwesomeIcon :icon="faGithub" class="text-[#eeee]" />
                 </span>
               </button>
             </div>
 
-            <!-- Sign up link -->
+            <!-- Login link -->
             <div class="text-center text-sm text-gray-400">
-              Don't have an account?
+              Already have an account?
+              <NuxtLink to="/login" class="text-purple-500 hover:text-purple-400">
+                Login
+              </NuxtLink>
             </div>
           </form>
 
@@ -139,23 +134,26 @@
 
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faFacebook, faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { useAuthStore } from "@/stores/auth"; 
-import { ref } from "vue";
-import { storeToRefs } from "pinia";
+import {
+  faFacebook,
+  faGoogle,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
 
 const email = ref("");
 const password = ref("");
+const confirmPassword = ref("");
+const authStore = useAuthStore();
 
-const authStore = useAuthStore(); 
-const { signup, loading,dataUser } = storeToRefs(authStore); 
-
-const handleSubmit = async () => {
-    authStore.signup({
+const handleSubmit = () => {
+  if (password.value !== confirmPassword.value) {
+    // Handle password mismatch
+    return;
+  }
+  
+  authStore.signup({
     email: email.value,
     password: password.value,
   });
-  // console.log(dataUser.value);
 };
-</script>
+</script> 

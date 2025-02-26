@@ -11,16 +11,6 @@
 </template>
 
 <script setup>
-import { useAuthorization } from "~/composables/authorization";
-const { login } = useAuthorization();
-const authStore = useAuthStore();
-onMounted(() => {
-  const token = useState("token", () => null);
-  if (!token.value) {
-    navigateTo("/login");
-  }
-  console.log(authStore.token);
-});
 </script>
 
 <style lang="scss" scoped></style>
