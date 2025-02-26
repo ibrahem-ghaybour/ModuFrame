@@ -3,6 +3,11 @@
     class="min-h-screen w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between bg-black p-12"
   >
     <!-- Left side with Welcome message -->
+    <GlopalPopup v-model:show="showPopup">
+      <p class="text-black text-xl capitalize">
+        {{ errorMessages }}
+      </p>
+    </GlopalPopup>
     <div class="lg:flex-1">
       <h1 class="text-6xl font-bold text-white mb-4">
         Welcome Back <span class="text-blue-500">!</span>
@@ -152,20 +157,22 @@ import { storeToRefs } from "pinia";
 const email = ref("");
 const password = ref("");
 const authStore = useAuthStore();
-const { loading, dataUser } = storeToRefs(authStore);
+const { loading, dataUser, errorMessages } = storeToRefs(authStore);
+const showPopup = ref(false);
 const handleSubmit = async () => {
   authStore.login({
     email: email.value,
     password: password.value,
-    // grant_type: "password",
   });
-  // console.log(dataUser.value);
 };
-const user = computed(() => dataUser.value);
-// watch(dataUser, (newVal) => {
-//   console.log("Updated dataUser:", newVal);
-// });
-// watch(loading, (newVal) => {
-//   console.log("Updated dataUser:", newVal);
-// });
+watch(errorMessages, (newVal) => {
+  if (newVal) {
+    showPopup.value = true;
+  }
+});
+watch(showPopup, (newVal) => {
+  if (!newVal) {
+    errorMessages.value = null;
+  }
+});
 </script>
