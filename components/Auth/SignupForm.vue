@@ -1,7 +1,15 @@
 <template>
-  <div class="min-h-screen w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between bg-black p-12">
+  <div
+    class="min-h-screen w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between bg-black p-12"
+  >
+    <GlopalPopup v-model:show="showPopup">
+      <p class="text-black text-xl capitalize">
+        {{ error }}
+        {{ errorMessages }}
+      </p>
+    </GlopalPopup>
     <!-- Left side with Welcome message -->
-    <div class="lg:flex-1">
+    <div class="lg:flex-1 max-lg:w-full">
       <h1 class="text-6xl font-bold text-white mb-4">
         Join Us <span class="text-blue-500">!</span>
       </h1>
@@ -11,7 +19,7 @@
     </div>
 
     <!-- Right side with signup form -->
-    <div class="w-[450px]">
+    <div class="lg:w-[450px] w-full">
       <div class="bg-[#1a1a1a] rounded-3xl p-8 relative overflow-hidden">
         <!-- Purple gradient circles -->
         <div
@@ -27,6 +35,17 @@
           <p class="text-gray-400 mb-8">Create your account</p>
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
+            <div>
+              <input
+                v-model="fullName"
+                min="3"
+                max="20"
+                type="text"
+                required
+                class="w-full bg-black/40 text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-purple-500"
+                placeholder="Full Name"
+              />
+            </div>
             <!-- Email Input -->
             <div>
               <input
@@ -69,7 +88,10 @@
                 class="rounded bg-black/40 border-gray-700 text-purple-500 focus:ring-purple-500"
               />
               <label for="terms" class="ml-2 text-sm text-gray-400">
-                I agree to the <a href="#" class="text-purple-500 hover:text-purple-400">Terms & Conditions</a>
+                I agree to the
+                <a href="#" class="text-purple-500 hover:text-purple-400"
+                  >Terms & Conditions</a
+                >
               </label>
             </div>
 
@@ -114,7 +136,10 @@
             <!-- Login link -->
             <div class="text-center text-sm text-gray-400">
               Already have an account?
-              <NuxtLink to="/login" class="text-purple-500 hover:text-purple-400">
+              <NuxtLink
+                to="/login"
+                class="text-purple-500 hover:text-purple-400"
+              >
                 Login
               </NuxtLink>
             </div>
@@ -133,6 +158,7 @@
 </template>
 
 <script setup>
+import { storeToRefs } from "pinia";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faFacebook,
@@ -140,20 +166,31 @@ import {
   faGithub,
 } from "@fortawesome/free-brands-svg-icons";
 
+const fullName = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const authStore = useAuthStore();
-
+const showPopup = ref(false);
+const error = ref(null);
+const { errorMessages } = storeToRefs(authStore);
 const handleSubmit = () => {
   if (password.value !== confirmPassword.value) {
-    // Handle password mismatch
+    error.value = "Passwords do not match";
+    showPopup.value = true;
     return;
   }
-  
   authStore.signup({
     email: email.value,
     password: password.value,
+    data: {
+      full_name: confirmPassword.value, // Add the user's name
+    },
   });
 };
-</script> 
+watch(errorMessages, (newVal) => {
+  if (newVal) {
+    showPopup.value = true;
+  }
+});
+</script>

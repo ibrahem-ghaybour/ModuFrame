@@ -22,12 +22,9 @@
         <div
           class="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-700/30 rounded-full blur-3xl"
         ></div>
-
         <!-- Login Form -->
         <div class="relative z-10">
-          <h2 class="text-2xl font-semibold text-white mb-2">
-            Login / <span class="text-[#575ebd76]">Signup</span>
-          </h2>
+          <h2 class="text-2xl font-semibold text-white mb-2">Login</h2>
           <p class="text-gray-400 mb-8">Glad you're back!</p>
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
@@ -69,13 +66,11 @@
             <button
               type="submit"
               class="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity"
-            >0{{ loading }}0{{ dataUser }}4
+            >
               <span v-if="loading">
                 <FontAwesomeIcon :icon="faSpinner" class="animate-spin" />
               </span>
-              <span v-else>
-                - Login / <span class="text-[#222773]">Signup</span>
-              </span>
+              <span v-else> Login </span>
             </button>
 
             <!-- Forgot password -->
@@ -122,6 +117,12 @@
             <!-- Sign up link -->
             <div class="text-center text-sm text-gray-400">
               Don't have an account?
+              <NuxtLink
+                to="/signup"
+                class="text-purple-500 hover:text-purple-400"
+              >
+                Sign up
+              </NuxtLink>
             </div>
           </form>
 
@@ -139,23 +140,32 @@
 
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faFacebook, faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import {
+  faFacebook,
+  faGoogle,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { useAuthStore } from "@/stores/auth"; 
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 
 const email = ref("");
 const password = ref("");
-
-const authStore = useAuthStore(); 
-const { signup, loading,dataUser } = storeToRefs(authStore); 
-
+const authStore = useAuthStore();
+const { loading, dataUser } = storeToRefs(authStore);
 const handleSubmit = async () => {
-    authStore.signup({
+  authStore.login({
     email: email.value,
     password: password.value,
+    // grant_type: "password",
   });
   // console.log(dataUser.value);
 };
+const user = computed(() => dataUser.value);
+// watch(dataUser, (newVal) => {
+//   console.log("Updated dataUser:", newVal);
+// });
+// watch(loading, (newVal) => {
+//   console.log("Updated dataUser:", newVal);
+// });
 </script>

@@ -17,7 +17,7 @@ export const useAuthorization = () => {
     callback: (data: any) => void
   ) => {
     try {
-      const { data, error } = await useFetch(`${URL_API_AUTH}/${request}`, {
+      const response = await fetch(`${URL_API_AUTH}/${request}`, {
         method: "POST",
         headers: {
           apikey: `${API_KEY}`,
@@ -26,12 +26,13 @@ export const useAuthorization = () => {
         },
         body: JSON.stringify(obj),
       });
-      if (error.value) {
-        console.log(error.value);
-        callback(error);
-        return;
+      const data = await response.json();
+      if (!response.ok) {
+        callback({errorMessage: data?.msg});
+        return
       }
-      callback(data.value);
+      callback({data, errorMessage: null});
+
     } catch (error) {
       console.log(error);
       callback(error);
