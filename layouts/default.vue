@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="bg-gray-800 fixed top-0 left-0 w-full">
+    <nav class="bg-[#211a27dc] fixed z-50 top-0 left-0 w-full">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <!-- Logo/Brand -->
@@ -37,10 +37,10 @@
       </div>
     </nav>
 
-    <div class="pt-16">
+    <div class=" bg-black">
       <slot />
     </div>
-    <footer class="bg-gray-800 text-gray-300">
+    <footer class="bg-[#211A27] text-gray-300">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <!-- Company Info -->

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-[url('images/bg-loginandsignup.png')] bg-cover bg-center pt-16">
     <LoginForm />
   </div>
 </template>

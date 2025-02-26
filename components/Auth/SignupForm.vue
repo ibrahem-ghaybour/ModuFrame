@@ -1,13 +1,21 @@
 <template>
   <div
-    class="min-h-screen w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between bg-black p-12"
+    class="min-h-screen text-white w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between p-12"
   >
+    {{ dataUser?.email }}
+
     <GlopalPopup v-model:show="showPopup">
       <p class="text-black text-xl capitalize">
         {{ error }}
         {{ errorMessages }}
+        {{ dataUser?.email }}
       </p>
     </GlopalPopup>
+    <!-- <GlopalPopup v-model:show="emailUser">
+      <p class="text-black text-xl capitalize">
+        {{ dataUser?.email }}
+      </p>
+    </GlopalPopup> -->
     <!-- Left side with Welcome message -->
     <div class="lg:flex-1 max-lg:w-full">
       <h1 class="text-6xl font-bold text-white mb-4">
@@ -96,13 +104,13 @@
             </div>
 
             <!-- Signup Button -->
-            <button
+            <!-- <button
               type="submit"
               class="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity"
             >
-              Create Account
-            </button>
-
+              
+            </button> -->
+            <GlopalButtonForm text="Sign Up" />
             <!-- Social Login Divider -->
             <div class="flex items-center justify-center space-x-4 my-6">
               <div class="h-[1px] bg-gray-700 flex-1"></div>
@@ -173,20 +181,24 @@ const confirmPassword = ref("");
 const authStore = useAuthStore();
 const showPopup = ref(false);
 const error = ref(null);
-const { errorMessages } = storeToRefs(authStore);
-const handleSubmit = () => {
+const { errorMessages, dataUser } = storeToRefs(authStore);
+const handleSubmit = async () => {
   if (password.value !== confirmPassword.value) {
     error.value = "Passwords do not match";
     showPopup.value = true;
     return;
   }
-  authStore.signup({
+  await authStore.signup({
     email: email.value,
     password: password.value,
     data: {
       full_name: confirmPassword.value, // Add the user's name
     },
   });
+  if (!errorMessages.value) {
+    showPopup.value = true;
+    error.value = "Confirm your signup in email";
+  }
 };
 watch(errorMessages, (newVal) => {
   if (newVal) {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between bg-black p-12"
+    class="min-h-screen w-full flex max-lg:flex-col max-lg:gap-y-10 items-center justify-between p-12"
   >
     <!-- Left side with Welcome message -->
     <GlopalPopup v-model:show="showPopup">
