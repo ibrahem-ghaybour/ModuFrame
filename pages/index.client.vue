@@ -1,12 +1,10 @@
 <template>
-  <client-only>
-    <div class="min-h-screen">
-      <h1 class="text-4xl font-bold text-center">
-        home
-        <br />
-      </h1>
-    </div>
-  </client-only>
+  <div class="min-h-screen pt-16">
+    <h1 class="text-4xl font-bold text-center">
+      home
+      <br />
+    </h1>
+  </div>
 </template>
 
 <script setup>
