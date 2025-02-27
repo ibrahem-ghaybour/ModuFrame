@@ -1,12 +1,10 @@
 
 // Example global styles
-:root {
-  --primary-color: #090909;
-  --primary-bg-button:#BBFF00
-}
+$primary-color: #4a90e2;
+
 body {
   font-family: sans-serif;
   padding: 0;
   margin: 0;
-  background-color: var(--primary-color);
+  // background-color: $primary-color;
 }
