@@ -62,23 +62,18 @@ export const useAuthStore = defineStore("auth", {
         this.loading = false;
       }
     },
-    async fetchUserProfile(token: string, method = "GET") {
+    async fetchUserProfile(token: string) {
       try {
         const { authGet } = useAuthorization();
-        await authGet(
-          "/auth/v1/user",
-          token,
-          method,
-          ({ data, errorMessage }) => {
-            if (errorMessage) {
-              this.errorMessages = errorMessage;
-              console.log(this.errorMessages);
-              return;
-            }
-            this.dataUser = data;
-            console.log(data);
+        await authGet("/auth/v1/user", token, ({ data, errorMessage }) => {
+          if (errorMessage) {
+            this.errorMessages = errorMessage;
+            console.log(this.errorMessages);
+            return;
           }
-        );
+          this.dataUser = data;
+          console.log(data);
+        });
       } catch (error) {
         console.log(error);
         this.loading = false;

@@ -1,15 +1,16 @@
-const URL_API_AUTH: string = getApiAuth();
-const API_KEY: string = getApiKey();
-export const apiRequest = async (
+export const useApiRequest = async (
   endpoint: string,
   method = "POST",
   body: any | null,
   token: string | null
 ) => {
   try {
+    const URL_API_AUTH: string = getApiAuth();
+    const API_KEY: string = getApiKey();
+
     const headers = {
       "Content-Type": "application/json",
-      apikey: `${API_KEY}`,
+      apikey: API_KEY,
       ...(token && { Authorization: `Bearer ${token}` }),
     };
 
