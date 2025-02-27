@@ -15,13 +15,12 @@
 //     return navigateTo("/");
 //   }
 // });
+const { fetchUserProfile } = useAuthStore();
 export default defineNuxtRouteMiddleware((to, from) => {
-  console.log("Auth Middleware Running...");
-
   if (process.server) return;
 
   let token = localStorage.getItem("token");
-
+  if (token) fetchUserProfile(token);
   if (!token) {
     const hash = window.location.hash;
     const tokenMatch = hash.match(/access_token=([^&]*)/);
@@ -32,7 +31,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
       localStorage.setItem("token", token);
 
       window.history.replaceState(null, "", window.location.pathname);
-      window.location.reload()
+      window.location.reload();
+      console.log("Token stored in local storage:");
     }
   }
 

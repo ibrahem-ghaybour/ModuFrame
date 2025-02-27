@@ -62,6 +62,56 @@ export const useAuthStore = defineStore("auth", {
         this.loading = false;
       }
     },
+    async fetchUserProfile(token: string, method = "GET") {
+      try {
+        const { authGet } = useAuthorization();
+        await authGet(
+          "/auth/v1/user",
+          token,
+          method,
+          ({ data, errorMessage }) => {
+            if (errorMessage) {
+              this.errorMessages = errorMessage;
+              console.log(this.errorMessages);
+              return;
+            }
+            this.dataUser = data;
+            console.log(data);
+          }
+        );
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+      }
+    },
+    async fetchUpdateProfile(token: string) {
+      try {
+        const { authGet } = useAuthorization();
+        await authGet("/auth/v1/user", token, ({ data, errorMessage }) => {
+          if (errorMessage) {
+            this.errorMessages = errorMessage;
+            console.log(this.errorMessages);
+            return;
+          }
+          this.dataUser = data;
+          console.log(data);
+        });
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+      }
+    },
+    // try {
+    // this. loading = true;
+    // const { authRegistration } = useAuthorization();
+    // await authRegistration(
+    // "auth/v1/profile",
+    // null,this.token,
+    // );
+    // this. loading = false;
+    // } catch (error) {
+    // }
+    // },
   },
   getters: {
     getLoading: (state) => state.loading,
@@ -69,4 +119,4 @@ export const useAuthStore = defineStore("auth", {
     getDataUser: (state) => state.dataUser,
   },
 });
-// : "ebrahimghaibour65@gmail.com",: "password123",
+// : "ebrahimghaibour65@gmail.com",: "password123"authGet,
