@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[url('/images/bg-loginandsignup.png')] bg-cover bg-center text-white px-6 pt-40 pb-32">
+  <div class="border rounded-[10px] border-[#ffffff3b] min-h-screen bg-[url('/images/bg-loginandsignup.png')] bg-cover bg-center text-white px-6 pt-40 pb-32">
     <div class="max-w-7xl mx-auto">
       <div
         class="inline-block bg-white/10 px-4 py-2 rounded-full text-sm text-[#C1FF00] mb-8"

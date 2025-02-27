@@ -1,9 +1,5 @@
 <template>
   <div class="min-h-screen pt-16 z-40">
-    <h1 class="text-4xl font-bold text-center text-white">
-      home
-      <br />
-    </h1>
     <HeroWelcome />
   </div>
 </template>
