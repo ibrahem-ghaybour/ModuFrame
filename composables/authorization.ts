@@ -10,34 +10,92 @@ export const useAuthorization = () => {
     token?: string;
     message?: string;
   }
+  const apiRequest = async (
+    endpoint: string,
+    method = "POST",
+    body: any | null,
+    token: string | null
+  ) => {
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+        apikey: `${API_KEY}`,
+        ...(token && { Authorization: `Bearer ${token}` }),
+      };
+
+      const response = await fetch(`${URL_API_AUTH}/${endpoint}`, {
+        method,
+        headers,
+        body: body ? JSON.stringify(body) : null,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.msg || "Request failed");
+      }
+
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: error };
+    }
+  };
   const authRegistration = async (
     request: string,
-    obj: any,
+    obj: any | null,
     token: string | null,
     callback: (data: any) => void
   ) => {
-    try {
-      const response = await fetch(`${URL_API_AUTH}/${request}`, {
-        method: "POST",
-        headers: {
-          apikey: `${API_KEY}`,
-          "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        body: JSON.stringify(obj),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        callback({errorMessage: data?.msg});
-        return
-      }
-      callback({data, errorMessage: null});
+    const response = await apiRequest(request, "POST", obj, token);
 
-    } catch (error) {
-      console.log(error);
-      callback(error);
+    if (!response.success) {
+      callback({ errorMessage: response.error });
+      return;
     }
+
+    callback({ data: response.data, errorMessage: null });
   };
+  const authGet = async (
+    request: string,
+    token: string | null,
+    callback: (data: any) => void
+  ) => {
+    const response = await apiRequest(request, "GET", null, token);
+
+    if (!response.success) {
+      callback({ errorMessage: response.error });
+      return;
+    }
+
+    callback({ data: response.data, errorMessage: null });
+  };
+  // const authRegistration = async (
+  //   request: string,
+  //   obj: any,
+  //   token: string | null,
+  //   callback: (data: any) => void
+  // ) => {
+  //   try {
+  //     const response = await fetch(`${URL_API_AUTH}/${request}`, {
+  //       method: "POST",
+  //       headers: {
+  //         apikey: `${API_KEY}`,
+  //         "Content-Type": "application/json",
+  //         ...(token && { Authorization: `Bearer ${token}` }),
+  //       },
+  //       body: JSON.stringify(obj),
+  //     });
+  //     const data = await response.json();
+  //     if (!response.ok) {
+  //       callback({ errorMessage: data?.msg });
+  //       return;
+  //     }
+  //     callback({ data, errorMessage: null });
+  //   } catch (error) {
+  //     console.log(error);
+  //     callback(error);
+  //   }
+  // };
   const login = async ({ email, password }: LoginCredentials) => {
     const errorMessage = ref<string | null>(null);
     const tokenRef = ref<LoginResponse | null>(null);
@@ -110,7 +168,7 @@ export const useAuthorization = () => {
       return error;
     }
   };
-  return { authRegistration, login, getDataUser, newUser };
+  return { authRegistration, login, authGet, newUser };
 };
 // try {
 //   const { data, error } = await useFetch(`${URL_API_AUTH}/auth/v1/signup`, {
