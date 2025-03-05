@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { useAuthorization } from "~/composables/authorization";
+import { useAuthorization } from "#imports";
+import { useRefreshToken } from "#imports";
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     token: null as string | null,
@@ -25,6 +26,9 @@ export const useAuthStore = defineStore("auth", {
               return;
             }
             this.dataUser = data;
+            // setCookie("accessToken", data.access_token, { maxAge: 3600 });
+            useRefreshToken().setToken(data.refresh_token);
+            console.log(useRefreshToken().token);
             this.loading = false;
           }
         );
@@ -46,12 +50,14 @@ export const useAuthStore = defineStore("auth", {
             if (errorMessage) {
               this.errorMessages = errorMessage;
               console.log(this.errorMessages);
-
               return;
             }
             this.dataUser = data;
-            console.log(data.access_token);
+            console.log(data);
             localStorage.setItem("token", data.access_token);
+            useRefreshToken().setToken(data.refresh_token);
+            // console.log(useRefreshToken().token?.value);
+            // useAuthorization().useRefreshToken().setToken(data.refresh_token);
             this.loading = false;
             navigateTo("/");
           }
@@ -72,7 +78,7 @@ export const useAuthStore = defineStore("auth", {
             return;
           }
           this.dataUser = data;
-          console.log(data);
+          // console.log(data);
         });
       } catch (error) {
         console.log(error);

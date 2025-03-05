@@ -10,6 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@feathersjs/authentication-client": "^5.0.33",
+    "@feathersjs/feathers": "^5.0.33",
+    "@feathersjs/rest-client": "^5.0.33",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

@@ -1,3 +1,11 @@
+const getHeaders = () => {
+  const API_KEY: string = getApiKey();
+  const headers = {
+    "Content-Type": "application/json",
+    apikey: API_KEY,
+  };
+  return headers;
+};
 export const useApiRequest = async (
   endpoint: string,
   method = "POST",
@@ -6,11 +14,8 @@ export const useApiRequest = async (
 ) => {
   try {
     const URL_API_AUTH: string = getApiAuth();
-    const API_KEY: string = getApiKey();
-
     const headers = {
-      "Content-Type": "application/json",
-      apikey: API_KEY,
+      ...getHeaders(),
       ...(token && { Authorization: `Bearer ${token}` }),
     };
 
@@ -31,3 +36,31 @@ export const useApiRequest = async (
     return { success: false, error: error };
   }
 };
+export async function refreshAccessToken(refreshToken: string) {
+  const { setToken, removeToken } = useRefreshToken();
+  try {
+    const URL_API_AUTH: string = getApiAuth();
+    const headers = getHeaders();
+    const response = await fetch(
+      `${URL_API_AUTH}/auth/v1/token?grant_type=refresh_token`,
+      {
+        method: "POST",
+        // credentials: "include",
+        headers,
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      }
+    );
+
+    if (!response.ok) {
+      removeToken();
+      throw new Error("Failed to refresh token");
+    }
+
+    const { refresh_token } = await response.json();
+    setToken(refresh_token);
+  } catch (error) {
+    console.error("Error refreshing access token:", error);
+    removeToken();
+    return null;
+  }
+}
